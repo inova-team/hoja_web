@@ -2,9 +2,12 @@
 <html lang="en">
 
 <head>
-    <title>Zay Shop eCommerce HTML CSS Template</title>
+    <title data-bind="page_title">Zay Shop eCommerce HTML CSS Template</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SEO -->
+    <meta name="description" content="" data-bind="meta_description">
 
     <link rel="apple-touch-icon" href="assets/img/apple-icon.png">
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
@@ -16,13 +19,13 @@
     <!-- Load fonts style after rendering the layout styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
-<!--
-    
-TemplateMo 559 Zay Shop
+    <!--
+        
+    TemplateMo 559 Zay Shop
 
-https://templatemo.com/tm-559-zay-shop
+    https://templatemo.com/tm-559-zay-shop
 
--->
+    -->
 </head>
 
 <body>
@@ -131,28 +134,34 @@ https://templatemo.com/tm-559-zay-shop
             <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
         </ol>
         <div class="carousel-inner">
+            <!-- Slide 1: conectado a Prismic -->
             <div class="carousel-item active">
                 <div class="container">
                     <div class="row p-5">
                         <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="./assets/img/banner_img_01.jpg" alt="">
+                            <!-- Imagen dinámica del hero -->
+                            <img class="img-fluid" data-bind="hero_image" src="./assets/img/banner_img_01.jpg" alt="Hero">
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left align-self-center">
-                                <h1 class="h1 text-success"><b>Zay</b> eCommerce</h1>
-                                <h3 class="h2">Tiny and Perfect eCommerce Template</h3>
-                                <p>
-                                    Zay Shop is an eCommerce HTML5 CSS template with latest version of Bootstrap 5 (beta 1). 
-                                    This template is 100% free provided by <a rel="sponsored" class="text-success" href="https://templatemo.com" target="_blank">TemplateMo</a> website. 
-                                    Image credits go to <a rel="sponsored" class="text-success" href="https://stories.freepik.com/" target="_blank">Freepik Stories</a>,
-                                    <a rel="sponsored" class="text-success" href="https://unsplash.com/" target="_blank">Unsplash</a> and
-                                    <a rel="sponsored" class="text-success" href="https://icons8.com/" target="_blank">Icons 8</a>.
+                                <!-- Título y subtítulo dinámicos -->
+                                <h1 class="h1 text-success" data-bind="title"><b>Zay</b> eCommerce</h1>
+                                <h3 class="h2" data-bind="hero_subtitle">Tiny and Perfect eCommerce Template</h3>
+                                <!-- CTA dinámico (opcional) -->
+                                <p class="mt-3">
+                                    <a href="shop.html" class="btn btn-success" data-bind="hero_cta_text">Go Shop</a>
+                                </p>
+                                <!-- Párrafo estático opcional -->
+                                <p class="d-none">
+                                    Zay Shop is an eCommerce HTML5 CSS template…
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Slides 2 y 3: puedes dejarlos estáticos -->
             <div class="carousel-item">
                 <div class="container">
                     <div class="row p-5">
@@ -202,17 +211,20 @@ https://templatemo.com/tm-559-zay-shop
     <!-- End Banner Hero -->
 
 
-    <!-- Start Categories of The Month -->
+    <!-- Start Categories of The Month (About) -->
     <section class="container py-5">
         <div class="row text-center pt-3">
             <div class="col-lg-6 m-auto">
-                <h1 class="h1">Categories of The Month</h1>
-                <p>
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
-                </p>
+                <h1 class="h1" data-bind="about_title">Categories of The Month</h1>
+                <div data-bind="about_richtext">
+                    <p>
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                        deserunt mollit anim id est laborum.
+                    </p>
+                </div>
             </div>
         </div>
+        <!-- Tres columnas permanecen estáticas -->
         <div class="row">
             <div class="col-12 col-md-4 p-5 mt-3">
                 <a href="#"><img src="./assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
@@ -239,87 +251,20 @@ https://templatemo.com/tm-559-zay-shop
         <div class="container py-5">
             <div class="row text-center py-3">
                 <div class="col-lg-6 m-auto">
-                    <h1 class="h1">Featured Product</h1>
+                    <h1 class="h1" data-bind="products_title">Featured Product</h1>
                     <p>
                         Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                         Excepteur sint occaecat cupidatat non proident.
                     </p>
+                    <!-- CTA opcional controlado por CMS -->
+                    <p class="mt-3">
+                        <a href="shop.html" class="btn btn-success" data-bind="products_cta_text">Go Shop</a>
+                    </p>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="shop-single.html">
-                            <img src="./assets/img/feature_prod_01.jpg" class="card-img-top" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
-                                <li class="text-muted text-right">$240.00</li>
-                            </ul>
-                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Gym Weight</a>
-                            <p class="card-text">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt in culpa qui officia deserunt.
-                            </p>
-                            <p class="text-muted">Reviews (24)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="shop-single.html">
-                            <img src="./assets/img/feature_prod_02.jpg" class="card-img-top" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
-                                <li class="text-muted text-right">$480.00</li>
-                            </ul>
-                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Cloud Nike Shoes</a>
-                            <p class="card-text">
-                                Aenean gravida dignissim finibus. Nullam ipsum diam, posuere vitae pharetra sed, commodo ullamcorper.
-                            </p>
-                            <p class="text-muted">Reviews (48)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="shop-single.html">
-                            <img src="./assets/img/feature_prod_03.jpg" class="card-img-top" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                </li>
-                                <li class="text-muted text-right">$360.00</li>
-                            </ul>
-                            <a href="shop-single.html" class="h2 text-decoration-none text-dark">Summer Addides Shoes</a>
-                            <p class="card-text">
-                                Curabitur ac mi sit amet diam luctus porta. Phasellus pulvinar sagittis diam, et scelerisque ipsum lobortis nec.
-                            </p>
-                            <p class="text-muted">Reviews (74)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            <!-- Grid dinámico de productos desde Prismic -->
+            <div class="row" data-bind="products_grid"></div>
         </div>
     </section>
     <!-- End Featured Product -->
@@ -409,8 +354,8 @@ https://templatemo.com/tm-559-zay-shop
                 <div class="row pt-2">
                     <div class="col-12">
                         <p class="text-left text-light">
-                            Copyright &copy; 2021 Company Name 
-                            | Designed by <a rel="sponsored" href="https://templatemo.com" target="_blank">TemplateMo</a>
+                            <span data-bind="footer_left">Copyright &copy; 2021 Company Name</span>
+                            <span class="ms-2" data-bind="footer_right">Designed by <a rel="sponsored" href="https://templatemo.com" target="_blank" class="text-decoration-none text-light">TemplateMo</a></span>
                         </p>
                     </div>
                 </div>
@@ -420,13 +365,133 @@ https://templatemo.com/tm-559-zay-shop
     </footer>
     <!-- End Footer -->
 
-    <!-- Start Script -->
+    <!-- Start Script (tus scripts originales) -->
     <script src="assets/js/jquery-1.11.0.min.js"></script>
     <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/templatemo.js"></script>
     <script src="assets/js/custom.js"></script>
     <!-- End Script -->
+
+    <!-- PRISMIC: cliente y helpers vía CDN (sin build) -->
+    <script type="module">
+      import * as prismic from "https://cdn.jsdelivr.net/npm/@prismicio/client@7/dist/prismicio-client.min.js";
+      import * as prismicH from "https://cdn.jsdelivr.net/npm/@prismicio/helpers@3/dist/prismicio-helpers.min.js";
+
+      // Configura tu repo
+      const repoName = "hoja";          // sin .prismic.io
+      const accessToken = null;         // si el repo es privado, pon token de lectura
+
+      const endpoint = prismic.getRepositoryEndpoint(repoName);
+      const client = prismic.createClient(endpoint, { accessToken });
+
+      const HOME_SINGLE_TYPE = "home";  // tu Custom Type (Single)
+      const PAGE_FALLBACK_TYPE = "page";
+
+      async function fetchHomeDoc() {
+        try {
+          return await client.getSingle(HOME_SINGLE_TYPE);
+        } catch (e1) {
+          try {
+            return await client.getByUID(PAGE_FALLBACK_TYPE, "home");
+          } catch (e2) {
+            console.error("No se encontró Home en Prismic.", e1, e2);
+            return null;
+          }
+        }
+      }
+
+      // Helpers simples de bind
+      const $ = (sel) => document.querySelector(sel);
+      const bindText = (key, value, fallback = "") => {
+        const el = $(`[data-bind="${key}"]`);
+        if (el) el.textContent = value ?? fallback;
+      };
+      const bindHTML = (key, rich) => {
+        const el = $(`[data-bind="${key}"]`);
+        if (el) el.innerHTML = prismicH.asHTML(rich ?? []);
+      };
+      const bindImg = (key, img) => {
+        const el = $(`[data-bind="${key}"]`);
+        if (el && img?.url) {
+          el.src = img.url;
+          el.alt = img.alt || el.alt || "";
+        }
+      };
+
+      // Render de productos con el mismo markup del template
+      function renderProducts(items = []) {
+        const grid = $(`[data-bind="products_grid"]`);
+        if (!grid) return;
+
+        grid.innerHTML = items.map((it) => {
+          const title = prismicH.asText(it.product_title || it.title || []);
+          const descHTML = prismicH.asHTML(it.product_description || []);
+          const imgURL = (it.product_image && it.product_image.url) || "./assets/img/feature_prod_01.jpg";
+          const price = (typeof it.price === "number") ? `$${it.price.toFixed(2)}` : (it.price || "");
+
+          return `
+            <div class="col-12 col-md-4 mb-4">
+              <div class="card h-100">
+                <a href="shop-single.html">
+                  <img src="${imgURL}" class="card-img-top" alt="${title}">
+                </a>
+                <div class="card-body">
+                  <ul class="list-unstyled d-flex justify-content-between">
+                    <li><!-- Estrellas opcionales --></li>
+                    <li class="text-muted text-right">${price}</li>
+                  </ul>
+                  <a href="shop-single.html" class="h2 text-decoration-none text-dark">${title || "Producto"}</a>
+                  <div class="card-text">${descHTML || ""}</div>
+                  <!-- <p class="text-muted">Reviews (0)</p> -->
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      function setMetaDescription(text) {
+        const meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.setAttribute("content", text || "");
+      }
+
+      (async () => {
+        const doc = await fetchHomeDoc();
+        if (!doc) return;
+
+        const d = doc.data || {};
+
+        // SEO
+        bindText("page_title", prismicH.asText(d.seo_title || d.title) || "Home");
+        setMetaDescription(prismicH.asText(d.seo_description || []));
+
+        // Hero
+        bindText("title", prismicH.asText(d.title) || "Zay eCommerce");
+        bindText("hero_subtitle", prismicH.asText(d.hero_subtitle) || "");
+        bindImg("hero_image", d.hero_image);
+        bindText("hero_cta_text", prismicH.asText(d.hero_cta_text) || "Go Shop");
+
+        // About
+        bindText("about_title", prismicH.asText(d.about_title) || "Categories of The Month");
+        bindHTML("about_richtext", d.about_richtext || []);
+
+        // Productos
+        bindText("products_title", prismicH.asText(d.products_title) || "Featured Product");
+        bindText("products_cta_text", prismicH.asText(d.products_cta_text) || "Go Shop");
+        const items = d.products || [];
+        renderProducts(items);
+
+        // Footer
+        bindText("footer_left", prismicH.asText(d.footer_left) || "");
+        // footer_right puede incluir HTML (enlace a TemplateMo). Si prefieres texto plano, usa bindText.
+        const footerRightEl = document.querySelector('[data-bind="footer_right"]');
+        if (footerRightEl) footerRightEl.innerHTML = prismicH.asHTML(d.footer_right || []) || footerRightEl.innerHTML;
+      })();
+    </script>
+
+    <!-- Prismic Preview (opcional) -->
+    <script defer src="https://static.cdn.prismic.io/prismic.js?new=true&repo=hoja"></script>
 </body>
 
 </html>
