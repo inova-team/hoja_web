@@ -374,122 +374,117 @@
     <script src="assets/js/custom.js"></script>
     <!-- End Script -->
 
-    <!-- PRISMIC: cliente y helpers vía CDN (sin build) -->
     <script type="module">
-	  import * as prismic from "https://cdn.jsdelivr.net/npm/@prismicio/client@7/+esm";
-	import * as prismicH from "https://cdn.jsdelivr.net/npm/@prismicio/helpers@3/+esm";
+  import * as prismic from "https://esm.sh/@prismicio/client@7";
 
-      // Configura tu repo
-      const repoName = "hoja";          // sin .prismic.io
-      const accessToken = null;         // si el repo es privado, pon token de lectura
+  const repoName = "hoja";                 // sin .prismic.io
+  const endpoint = prismic.getRepositoryEndpoint(repoName);
+  const client = prismic.createClient(endpoint, { accessToken: null });
 
-      const endpoint = prismic.getRepositoryEndpoint(repoName);
-      const client = prismic.createClient(endpoint, { accessToken });
+  // Helpers AHORA del cliente:
+  const asText = prismic.asText;
+  const asHTML = prismic.asHTML;
 
-      const HOME_SINGLE_TYPE = "home";  // tu Custom Type (Single)
-      const PAGE_FALLBACK_TYPE = "page";
+  const HOME_SINGLE_TYPE = "home";
+  const PAGE_FALLBACK_TYPE = "page";
 
-      async function fetchHomeDoc() {
-        try {
-          return await client.getSingle(HOME_SINGLE_TYPE);
-        } catch (e1) {
-          try {
-            return await client.getByUID(PAGE_FALLBACK_TYPE, "home");
-          } catch (e2) {
-            console.error("No se encontró Home en Prismic.", e1, e2);
-            return null;
-          }
-        }
-      }
+  const $ = (sel) => document.querySelector(sel);
+  const bindText = (key, value, fallback = "") => {
+    const el = $(`[data-bind="${key}"]`);
+    if (el) el.textContent = value ?? fallback;
+  };
+  const bindHTML = (key, rich) => {
+    const el = $(`[data-bind="${key}"]`);
+    if (el) el.innerHTML = asHTML(rich ?? []);
+  };
+  const bindImg = (key, img) => {
+    const el = $(`[data-bind="${key}"]`);
+    if (el && img?.url) {
+      el.src = img.url;
+      el.alt = img.alt || el.alt || "";
+    }
+  };
 
-      // Helpers simples de bind
-      const $ = (sel) => document.querySelector(sel);
-      const bindText = (key, value, fallback = "") => {
-        const el = $(`[data-bind="${key}"]`);
-        if (el) el.textContent = value ?? fallback;
-      };
-      const bindHTML = (key, rich) => {
-        const el = $(`[data-bind="${key}"]`);
-        if (el) el.innerHTML = prismicH.asHTML(rich ?? []);
-      };
-      const bindImg = (key, img) => {
-        const el = $(`[data-bind="${key}"]`);
-        if (el && img?.url) {
-          el.src = img.url;
-          el.alt = img.alt || el.alt || "";
-        }
-      };
+  function renderProducts(items = []) {
+    const grid = $('[data-bind="products_grid"]');
+    if (!grid) return;
 
-      // Render de productos con el mismo markup del template
-      function renderProducts(items = []) {
-        const grid = $(`[data-bind="products_grid"]`);
-        if (!grid) return;
+    grid.innerHTML = items.map((it) => {
+      const title = asText(it.product_title || it.title || []);
+      const descHTML = asHTML(it.product_description || []);
+      const imgURL = (it.product_image && it.product_image.url) || "./assets/img/feature_prod_01.jpg";
+      const price = (typeof it.price === "number") ? `$${it.price.toFixed(2)}` : (it.price || "");
 
-        grid.innerHTML = items.map((it) => {
-          const title = prismicH.asText(it.product_title || it.title || []);
-          const descHTML = prismicH.asHTML(it.product_description || []);
-          const imgURL = (it.product_image && it.product_image.url) || "./assets/img/feature_prod_01.jpg";
-          const price = (typeof it.price === "number") ? `$${it.price.toFixed(2)}` : (it.price || "");
-
-          return `
-            <div class="col-12 col-md-4 mb-4">
-              <div class="card h-100">
-                <a href="shop-single.html">
-                  <img src="${imgURL}" class="card-img-top" alt="${title}">
-                </a>
-                <div class="card-body">
-                  <ul class="list-unstyled d-flex justify-content-between">
-                    <li><!-- Estrellas opcionales --></li>
-                    <li class="text-muted text-right">${price}</li>
-                  </ul>
-                  <a href="shop-single.html" class="h2 text-decoration-none text-dark">${title || "Producto"}</a>
-                  <div class="card-text">${descHTML || ""}</div>
-                  <!-- <p class="text-muted">Reviews (0)</p> -->
-                </div>
-              </div>
+      return `
+        <div class="col-12 col-md-4 mb-4">
+          <div class="card h-100">
+            <a href="shop-single.html">
+              <img src="${imgURL}" class="card-img-top" alt="${title}">
+            </a>
+            <div class="card-body">
+              <ul class="list-unstyled d-flex justify-content-between">
+                <li><!-- Estrellas opcionales --></li>
+                <li class="text-muted text-right">${price}</li>
+              </ul>
+              <a href="shop-single.html" class="h2 text-decoration-none text-dark">${title || "Producto"}</a>
+              <div class="card-text">${descHTML || ""}</div>
             </div>
-          `;
-        }).join("");
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function setMetaDescription(text) {
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", text || "");
+  }
+
+  async function fetchHomeDoc() {
+    try {
+      return await client.getSingle(HOME_SINGLE_TYPE);
+    } catch {
+      try {
+        return await client.getByUID(PAGE_FALLBACK_TYPE, "home");
+      } catch (e2) {
+        console.error("No se encontró Home en Prismic.", e2);
+        return null;
       }
+    }
+  }
 
-      function setMetaDescription(text) {
-        const meta = document.querySelector('meta[name="description"]');
-        if (meta) meta.setAttribute("content", text || "");
-      }
+  (async () => {
+    const doc = await fetchHomeDoc();
+    if (!doc) return;
 
-      (async () => {
-        const doc = await fetchHomeDoc();
-        if (!doc) return;
+    const d = doc.data || {};
 
-        const d = doc.data || {};
+    // SEO
+    bindText("page_title", asText(d.seo_title || d.title) || "Home");
+    setMetaDescription(asText(d.seo_description || []));
 
-        // SEO
-        bindText("page_title", prismicH.asText(d.seo_title || d.title) || "Home");
-        setMetaDescription(prismicH.asText(d.seo_description || []));
+    // Hero
+    bindText("title", asText(d.title) || "Zay eCommerce");
+    bindText("hero_subtitle", asText(d.hero_subtitle) || "");
+    bindImg("hero_image", d.hero_image);
+    bindText("hero_cta_text", asText(d.hero_cta_text) || "Go Shop");
 
-        // Hero
-        bindText("title", prismicH.asText(d.title) || "Zay eCommerce");
-        bindText("hero_subtitle", prismicH.asText(d.hero_subtitle) || "");
-        bindImg("hero_image", d.hero_image);
-        bindText("hero_cta_text", prismicH.asText(d.hero_cta_text) || "Go Shop");
+    // About
+    bindText("about_title", asText(d.about_title) || "Categories of The Month");
+    bindHTML("about_richtext", d.about_richtext || []);
 
-        // About
-        bindText("about_title", prismicH.asText(d.about_title) || "Categories of The Month");
-        bindHTML("about_richtext", d.about_richtext || []);
+    // Productos
+    bindText("products_title", asText(d.products_title) || "Featured Product");
+    bindText("products_cta_text", asText(d.products_cta_text) || "Go Shop");
+    renderProducts(d.products || []);
 
-        // Productos
-        bindText("products_title", prismicH.asText(d.products_title) || "Featured Product");
-        bindText("products_cta_text", prismicH.asText(d.products_cta_text) || "Go Shop");
-        const items = d.products || [];
-        renderProducts(items);
+    // Footer (si guardas como Rich Text, puedes hacer innerHTML = asHTML(...))
+    bindText("footer_left", asText(d.footer_left) || "");
+    const fr = document.querySelector('[data-bind="footer_right"]');
+    if (fr) fr.innerHTML = asHTML(d.footer_right || []) || fr.innerHTML;
+  })();
+</script>
 
-        // Footer
-        bindText("footer_left", prismicH.asText(d.footer_left) || "");
-        // footer_right puede incluir HTML (enlace a TemplateMo). Si prefieres texto plano, usa bindText.
-        const footerRightEl = document.querySelector('[data-bind="footer_right"]');
-        if (footerRightEl) footerRightEl.innerHTML = prismicH.asHTML(d.footer_right || []) || footerRightEl.innerHTML;
-      })();
-    </script>
 
     <!-- Prismic Preview (opcional) -->
     <script defer src="https://static.cdn.prismic.io/prismic.js?new=true&repo=hoja"></script>
