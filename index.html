@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Zay Shop eCommerce HTML CSS Template</title>
+    <title>Hoja - Plant Boutique [Perú]</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -28,10 +28,75 @@ https://templatemo.com/tm-559-zay-shop
 <body>
 
 
-      <!-- Loader -->
-  <div id="page-loader" class="loader">
-    <div class="spinner"></div>
+<!-- Loader -->
+<!-- Loader -->
+<div id="page-loader" class="loader">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="assets/media/hoja_loader.mp4" type="video/mp4" />
+      Tu navegador no soporta video.
+    </video>
   </div>
+  <!-- End Loader -->
+  <script>
+    (() => {
+      const HOLD_MS = 5000;      // tiempo mínimo visible
+      const FADE_MS = 1000;      // duración del fade (debe coincidir con CSS)
+      const START_AT_DOM = true; // arranca el conteo apenas el DOM está listo
+    
+      const start = () => {
+        let startTime = performance.now();
+        let deadline = startTime + HOLD_MS;
+    
+        const loader = document.getElementById('page-loader');
+        if (!loader) return;
+    
+        // Estilos mínimos en línea para impedir display:none intempestivo
+        const enforceVisible = () => {
+          loader.style.removeProperty('display');     // quita display:none si alguien lo puso
+          loader.style.visibility = 'visible';
+          loader.style.opacity = '1';
+          loader.style.pointerEvents = 'auto';
+        };
+    
+
+    
+    
+        // 3) Bucle de enforcement ligero (por si cambian estilos en ráfagas)
+        const tick = () => {
+          const now = performance.now();
+          if (now < deadline) {
+            enforceVisible();
+            requestAnimationFrame(tick);
+          } else {
+            // tiempo cumplido → fade-out y remove cuando termine la transición
+            loader.classList.add('fade-out');
+            const done = () => {
+              try { mo.disconnect(); } catch(e){}
+              // restauramos prototypes por seguridad
+              try { Node.prototype.removeChild = origRemoveChild; } catch(e){}
+              try { origRemove(); } catch(e){}
+            };
+            loader.addEventListener('transitionend', done, { once: true });
+    
+            // Fallback por si no dispara transitionend
+            setTimeout(done, FADE_MS + 200);
+          }
+        };
+    
+        // Inicializa visible y arranca el ciclo
+        enforceVisible();
+        tick();
+      };
+    
+      if (START_AT_DOM && document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start, { once: true });
+      } else {
+        start();
+      }
+    })();
+    </script>
+    
+      <!-- End Loader -->
 
 
   
@@ -64,8 +129,8 @@ https://templatemo.com/tm-559-zay-shop
     <nav class="navbar navbar-expand-lg navbar-light shadow">
         <div class="container d-flex justify-content-between align-items-center">
 
-            <a class="navbar-brand text-success logo h1 align-self-center" href="index.html">
-                Zay
+            <a class="navbar-brand align-self-center" href="index.html">
+                <img src="assets/img/logo_blanco_nav.jpeg" alt="Logo" width="150" height="50">
             </a>
 
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,18 +212,35 @@ https://templatemo.com/tm-559-zay-shop
                 <div class="container">
                     <div class="row p-5">
                         <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="./assets/img/banner_img_01.jpg" alt="">
+                            <img class="img-fluid hoja-img-frame" src="./assets/img/banner_img_01.png" alt="Planta Calathea">
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left align-self-center">
-                                <h1 class="h1 text-success"><b>Zay</b> eCommerce</h1>
-                                <h3 class="h2">Tiny and Perfect eCommerce Template</h3>
+                                <h1 class="h1 text-success"><b>Calathea</b></h1>
+                                <h3 class="h2">Elegancia natural para interiores</h3>
                                 <p>
-                                    Zay Shop is an eCommerce HTML5 CSS template with latest version of Bootstrap 5 (beta 1). 
-                                    This template is 100% free provided by <a rel="sponsored" class="text-success" href="https://templatemo.com" target="_blank">TemplateMo</a> website. 
-                                    Image credits go to <a rel="sponsored" class="text-success" href="https://stories.freepik.com/" target="_blank">Freepik Stories</a>,
-                                    <a rel="sponsored" class="text-success" href="https://unsplash.com/" target="_blank">Unsplash</a> and
-                                    <a rel="sponsored" class="text-success" href="https://icons8.com/" target="_blank">Icons 8</a>.
+                                    La Calathea es conocida por sus hojas decorativas y colores vivos, ideales para dar vida a tus espacios. 
+                                    Una planta de interior perfecta que combina estilo y frescura en cualquier ambiente.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item ">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last d-flex justify-content-center align-items-center">
+                            <img class="img-fluid hoja-img-frame" src="./assets/img/banner_img_02.png" alt="Cordyline">
+                          </div>
+                          
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left ">
+                                <h1 class="h1 text-success">Cordyline</h1>
+                                <h3 class="h2">Color y resistencia en tu hogar</h3>
+                                <p>
+                                    La Cordyline aporta un toque tropical con sus tonos rojizos y verdes intensos. 
+                                    Es una planta resistente y versátil, perfecta para decorar interiores y exteriores.
                                 </p>
                             </div>
                         </div>
@@ -169,41 +251,23 @@ https://templatemo.com/tm-559-zay-shop
                 <div class="container">
                     <div class="row p-5">
                         <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="./assets/img/banner_img_02.jpg" alt="">
+                            <img class="img-fluid hoja-img-frame" src="./assets/img/banner_img_03.png" alt="Sansevieria trifasciata">
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left">
-                                <h1 class="h1">Proident occaecat</h1>
-                                <h3 class="h2">Aliquip ex ea commodo consequat</h3>
+                                <h1 class="h1 text-success">Sansevieria trifasciata</h1>
+                                <h3 class="h2">Purifica el aire naturalmente</h3>
                                 <p>
-                                    You are permitted to use this Zay CSS template for your commercial websites. 
-                                    You are <strong>not permitted</strong> to re-distribute the template ZIP file in any kind of template collection websites.
+                                    Conocida como lengua de suegra, la Sansevieria trifasciata es ideal para mejorar la calidad del aire. 
+                                    Una planta fuerte y fácil de cuidar que aporta frescura y salud a tu espacio.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="row p-5">
-                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                            <img class="img-fluid" src="./assets/img/banner_img_03.jpg" alt="">
-                        </div>
-                        <div class="col-lg-6 mb-0 d-flex align-items-center">
-                            <div class="text-align-left">
-                                <h1 class="h1">Repr in voluptate</h1>
-                                <h3 class="h2">Ullamco laboris nisi ut </h3>
-                                <p>
-                                    We bring you 100% free CSS templates for your websites. 
-                                    If you wish to support TemplateMo, please make a small contribution via PayPal or tell your friends about our website. Thank you.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            
+        
         <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
             <i class="fas fa-chevron-left"></i>
         </a>

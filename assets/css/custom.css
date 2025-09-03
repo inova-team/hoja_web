@@ -5,22 +5,72 @@ Custom Css
 /* Ocultar topbar hasta que cargue Strapi */
 #templatemo_nav_top { visibility: hidden; }
 
-/* Loader styles */
-.loader {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  z-index: 9999;
-}
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 5px solid #ccc;
-  border-top: 5px solid #28a745;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
+/* ===== Loader con video: 3s visibles + fade-out 1s ===== */
+#page-loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #152d21;        /* color solicitado */
+    z-index: 9999;
+  
+    /* visible al inicio */
+    opacity: 1;
+    visibility: visible;
+  
+    /* Mantener 3s y luego desvanecer 1s */
+    animation: hojaDelayHide 1s ease-out 3s forwards;
+  }
+  
+  #page-loader video {
+    width: 160px;               /* ajusta tamaño a gusto */
+    max-width: 45vw;
+    height: auto;
+    display: block;
+  }
+  
+  @keyframes hojaDelayHide {
+    to {
+      opacity: 0;
+      visibility: hidden;       /* deja de interceptar clics */
+    }
+  }
+  
+  /* (Opcional) Respeta reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    #page-loader { animation: none; }
+  }
+  #page-loader {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #152d21;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-out; /* 1000 ms */
+  }
+  
+  #page-loader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+    
+    
+
+/* Marco genérico reutilizable */
+.hoja-img-frame {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  
+    border: 1px solid #0b3315;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
