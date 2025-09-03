@@ -5,43 +5,11 @@ Custom Css
 /* Ocultar topbar hasta que cargue Strapi */
 #templatemo_nav_top { visibility: hidden; }
 
-/* ===== Loader con video: 3s visibles + fade-out 1s ===== */
-#page-loader {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #152d21;        /* color solicitado */
-    z-index: 9999;
-  
-    /* visible al inicio */
-    opacity: 1;
-    visibility: visible;
-  
-    /* Mantener 3s y luego desvanecer 1s */
-    animation: hojaDelayHide 1s ease-out 3s forwards;
-  }
-  
-  #page-loader video {
-    width: 400px;               /* ajusta tamaño a gusto */
-    max-width: 45vw;
-    height: auto;
-    display: block;
-  }
-  
-  @keyframes hojaDelayHide {
-    to {
-      opacity: 0;
-      visibility: hidden;       /* deja de interceptar clics */
-    }
-  }
-  
-  /* (Opcional) Respeta reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    #page-loader { animation: none; }
-  }
-  #page-loader {
+
+/* =========================
+   Loader de video
+   ========================= */
+   #page-loader {
     position: fixed;
     inset: 0;
     display: flex;
@@ -50,15 +18,35 @@ Custom Css
     background: #152d21;
     z-index: 9999;
     opacity: 1;
-    transition: opacity 1s ease-out; /* 1000 ms */
+    visibility: visible;
+    transition: opacity 1000ms ease-out, visibility 0s linear 1000ms; /* oculta al final del fade */
   }
   
-  #page-loader.fade-out {
+  #page-loader video {
+    width: 400px;
+    max-width: 45vw;
+    height: auto;
+    display: block;
+  }
+  
+  /* Estado final que aplica el JS */
+  #page-loader.is-hidden {
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
   }
-    
-    
+  
+  /* Respeta reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    #page-loader {
+      transition: none;
+    }
+    #page-loader.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  
 
 /* Marco genérico reutilizable */
 .hoja-img-frame {

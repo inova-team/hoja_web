@@ -16,7 +16,8 @@
     <!-- Load fonts style after rendering the layout styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="assets/css/fontawesome.min.css">
-<!--
+<!--<noscript><style>#page-loader{display:none !important}</style></noscript>
+
     
 TemplateMo 559 Zay Shop
 
@@ -29,7 +30,6 @@ https://templatemo.com/tm-559-zay-shop
 
 
 <!-- Loader -->
-<!-- Loader -->
 <div id="page-loader" class="loader">
     <video autoplay muted loop playsinline preload="auto">
       <source src="assets/media/hoja_loader.mp4" type="video/mp4" />
@@ -39,56 +39,47 @@ https://templatemo.com/tm-559-zay-shop
   <!-- End Loader -->
   <script>
     (() => {
-      const HOLD_MS = 3000;      // tiempo mínimo visible
-      const FADE_MS = 1000;      // duración del fade (debe coincidir con CSS)
-      const START_AT_DOM = true; // arranca el conteo apenas el DOM está listo
+      const HOLD_MS = 3000;   // tiempo mínimo que el loader estará visible
+      const FADE_MS = 1000;   // debe coincidir con el transition de CSS
     
       const start = () => {
-        let startTime = performance.now();
-        let deadline = startTime + HOLD_MS;
-    
         const loader = document.getElementById('page-loader');
         if (!loader) return;
     
-        // Estilos mínimos en línea para impedir display:none intempestivo
-        const enforceVisible = () => {
-          loader.style.removeProperty('display');     // quita display:none si alguien lo puso
-          loader.style.visibility = 'visible';
-          loader.style.opacity = '1';
-          loader.style.pointerEvents = 'auto';
-        };
+        const deadline = performance.now() + HOLD_MS;
     
-
-    
-    
-        // 3) Bucle de enforcement ligero (por si cambian estilos en ráfagas)
-        const tick = () => {
-          const now = performance.now();
+        const tick = (now) => {
           if (now < deadline) {
-            enforceVisible();
             requestAnimationFrame(tick);
-          } else {
-            // tiempo cumplido → fade-out y remove cuando termine la transición
-            loader.classList.add('fade-out');
-            const done = () => {
-              try { mo.disconnect(); } catch(e){}
-              // restauramos prototypes por seguridad
-              try { Node.prototype.removeChild = origRemoveChild; } catch(e){}
-              try { origRemove(); } catch(e){}
-            };
-            loader.addEventListener('transitionend', done, { once: true });
-    
-            // Fallback por si no dispara transitionend
-            setTimeout(done, FADE_MS + 200);
+            return;
           }
+    
+          // Inicia el fade
+          loader.classList.add('is-hidden');
+          loader.setAttribute('aria-hidden', 'true');
+    
+          // Intenta pausar el video (opcional)
+          try { loader.querySelector('video')?.pause(); } catch (_) {}
+    
+          const finalize = () => {
+            // Quita el nodo del DOM para que no quede encima de nada
+            try { loader.remove(); } catch (_) {
+              // fallback
+              loader.style.display = 'none';
+            }
+          };
+    
+          // Remueve cuando termina la transición
+          loader.addEventListener('transitionend', finalize, { once: true });
+    
+          // Fallback por si no llega 'transitionend'
+          setTimeout(finalize, FADE_MS + 200);
         };
     
-        // Inicializa visible y arranca el ciclo
-        enforceVisible();
-        tick();
+        requestAnimationFrame(tick);
       };
     
-      if (START_AT_DOM && document.readyState === 'loading') {
+      if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', start, { once: true });
       } else {
         start();
