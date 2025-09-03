@@ -24,7 +24,7 @@ Custom Css
   }
   
   #page-loader video {
-    width: 160px;               /* ajusta tamaño a gusto */
+    width: 400px;               /* ajusta tamaño a gusto */
     max-width: 45vw;
     height: auto;
     display: block;
