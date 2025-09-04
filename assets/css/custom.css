@@ -6,47 +6,7 @@ Custom Css
 #templatemo_nav_top { visibility: hidden; }
 
 
-/* =========================
-   Loader de video
-   ========================= */
-   #page-loader {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #152d21;
-    z-index: 9999;
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 1000ms ease-out, visibility 0s linear 1000ms; /* oculta al final del fade */
-  }
-  
-  #page-loader video {
-    width: 400px;
-    max-width: 45vw;
-    height: auto;
-    display: block;
-  }
-  
-  /* Estado final que aplica el JS */
-  #page-loader.is-hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-  
-  /* Respeta reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    #page-loader {
-      transition: none;
-    }
-    #page-loader.is-hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-  
+
 
 /* Marco genérico reutilizable */
 .hoja-img-frame {

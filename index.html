@@ -28,68 +28,6 @@ https://templatemo.com/tm-559-zay-shop
 
 <body>
 
-
-<!-- Loader -->
-<div id="page-loader" class="loader">
-    <video autoplay muted loop playsinline preload="auto">
-      <source src="assets/media/hoja_loader.mp4" type="video/mp4" />
-      Tu navegador no soporta video.
-    </video>
-  </div>
-  <!-- End Loader -->
-  <script>
-    (() => {
-      const HOLD_MS = 3000;   // tiempo mínimo que el loader estará visible
-      const FADE_MS = 1000;   // debe coincidir con el transition de CSS
-    
-      const start = () => {
-        const loader = document.getElementById('page-loader');
-        if (!loader) return;
-    
-        const deadline = performance.now() + HOLD_MS;
-    
-        const tick = (now) => {
-          if (now < deadline) {
-            requestAnimationFrame(tick);
-            return;
-          }
-    
-          // Inicia el fade
-          loader.classList.add('is-hidden');
-          loader.setAttribute('aria-hidden', 'true');
-    
-          // Intenta pausar el video (opcional)
-          try { loader.querySelector('video')?.pause(); } catch (_) {}
-    
-          const finalize = () => {
-            // Quita el nodo del DOM para que no quede encima de nada
-            try { loader.remove(); } catch (_) {
-              // fallback
-              loader.style.display = 'none';
-            }
-          };
-    
-          // Remueve cuando termina la transición
-          loader.addEventListener('transitionend', finalize, { once: true });
-    
-          // Fallback por si no llega 'transitionend'
-          setTimeout(finalize, FADE_MS + 200);
-        };
-    
-        requestAnimationFrame(tick);
-      };
-    
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', start, { once: true });
-      } else {
-        start();
-      }
-    })();
-    </script>
-    
-      <!-- End Loader -->
-
-
   
     <!-- Start Top Nav -->
     <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
@@ -123,7 +61,6 @@ https://templatemo.com/tm-559-zay-shop
             <a class="navbar-brand align-self-center" href="index.html">
                 <img src="assets/img/logo_blanco_nav.jpeg" alt="Logo" width="150" height="50">
             </a>
-
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -193,11 +130,11 @@ https://templatemo.com/tm-559-zay-shop
 
     <!-- Start Banner Hero -->
     <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
-        <ol class="carousel-indicators">
+        <div class="carousel-indicators">
             <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
             <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
             <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
-        </ol>
+        </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="container">
@@ -227,7 +164,7 @@ https://templatemo.com/tm-559-zay-shop
                           
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left ">
-                                <h1 class="h1 text-success">Cordyline</h1>
+                                <h1 class="h1 text-success"><b>Cordyline</b></h1>
                                 <h3 class="h2">Color y resistencia en tu hogar</h3>
                                 <p>
                                     La Cordyline aporta un toque tropical con sus tonos rojizos y verdes intensos. 
@@ -246,7 +183,7 @@ https://templatemo.com/tm-559-zay-shop
                         </div>
                         <div class="col-lg-6 mb-0 d-flex align-items-center">
                             <div class="text-align-left">
-                                <h1 class="h1 text-success">Sansevieria trifasciata</h1>
+                                <h1 class="h1 text-success"><b>Sansevieria trifasciata</b></h1>
                                 <h3 class="h2">Purifica el aire naturalmente</h3>
                                 <p>
                                     Conocida como lengua de suegra, la Sansevieria trifasciata es ideal para mejorar la calidad del aire. 
@@ -257,7 +194,7 @@ https://templatemo.com/tm-559-zay-shop
                     </div>
                 </div>
             </div>
-            
+        </div>   
         
         <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
             <i class="fas fa-chevron-left"></i>
