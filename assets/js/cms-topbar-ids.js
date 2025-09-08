@@ -1,9 +1,8 @@
-// Use the ESM build of the Strapi SDK. The previous "+esm" URL
-// returned a wrapper that didn't expose the expected named exports,
-// causing runtime failures when importing `createClient` in the
-// browser. Switching to the `?module` parameter delivers the proper
-// module build with the `createClient` export.
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@strapi/sdk-js@latest?module';
+// Load the Strapi SDK via jsDelivr using the `+esm` build, which
+// exposes the SDK methods on the default export. Destructure
+// `createClient` from that object for use below.
+import StrapiSDK from 'https://cdn.jsdelivr.net/npm/@strapi/sdk-js@latest/+esm';
+const { createClient } = StrapiSDK;
 
 // ===== Config =====
 const STRAPI_URL   = window.STRAPI_URL  || 'http://localhost:1337';
