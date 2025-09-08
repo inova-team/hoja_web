@@ -1,22 +1,19 @@
-// ===== Config =====
-const STRAPI_URL   = window.STRAPI_URL  || 'http://localhost:1337';
-const STRAPI_TOKEN = window.STRAPI_TOKEN || '';
-const authHeaders  = STRAPI_TOKEN ? { Authorization: `Bearer ${STRAPI_TOKEN}` } : {};
+import { strapi } from '../../../src/strapiClient.js';
 
 // ===== Helpers =====
 function withTimeout(promise, ms = 12000, message = `Request timed out after ${ms} ms`) {
   return new Promise((resolve, reject) => {
     const t = setTimeout(() => reject(new Error(message)), ms);
-    promise.then(v => { clearTimeout(t); resolve(v); })
-           .catch(e => { clearTimeout(t); reject(e); });
+    promise
+      .then(v => {
+        clearTimeout(t);
+        resolve(v);
+      })
+      .catch(e => {
+        clearTimeout(t);
+        reject(e);
+      });
   });
-}
-
-async function getJSON(path) {
-  const url = `${STRAPI_URL}${path}`;
-  const res = await fetch(url, { headers: { ...authHeaders } });
-  if (!res.ok) throw new Error(`HTTP ${res.status} @ ${url}`);
-  return res.json();
 }
 
 // Normalize phone to tel: href
@@ -53,7 +50,7 @@ function firstNonEmpty(obj, candidates) {
 async function renderTopBarIDs() {
     try {
       console.time('site-setting');
-      const resp = await withTimeout(getJSON('/api/site-setting?populate=*'), 12000);
+      const resp = await withTimeout(strapi.get('/site-setting', { populate: '*' }), 12000);
       console.timeEnd('site-setting');
       console.debug('[TopBar] raw response:', resp);
   
@@ -88,5 +85,5 @@ async function renderTopBarIDs() {
   }
 
   
-// Ensure DOM exists; script is defer'ed
+// Ensure DOM exists; script is loaded as a module
 window.addEventListener('DOMContentLoaded', renderTopBarIDs);
