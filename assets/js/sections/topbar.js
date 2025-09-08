@@ -1,44 +1,17 @@
-// Load the Strapi SDK via jsDelivr using the `+esm` build, which
-// exposes the SDK methods on the default export. Destructure
-// `createClient` from that object for use below.
-import StrapiSDK from 'https://cdn.jsdelivr.net/npm/@strapi/sdk-js@latest/+esm';
-const { createClient } = StrapiSDK;
-
-// ===== Config =====
-const STRAPI_URL   = window.STRAPI_URL  || 'http://localhost:1337';
-const STRAPI_TOKEN = window.STRAPI_TOKEN || '';
-
-const client = createClient({
-  url: STRAPI_URL,
-  prefix: '/api',
-  token: STRAPI_TOKEN,
-});
-
-// ===== Helpers =====
-function withTimeout(promise, ms = 12000, message = `Request timed out after ${ms} ms`) {
-  return new Promise((resolve, reject) => {
-    const t = setTimeout(() => reject(new Error(message)), ms);
-    promise.then(v => { clearTimeout(t); resolve(v); })
-           .catch(e => { clearTimeout(t); reject(e); });
-  });
-}
-
-async function getJSON(path, params = {}) {
-  return client.http.get(path, { searchParams: params }).json();
-}
-
-// Normalize phone to tel: href
+// Convert a raw phone number to a `tel:` link
 function toTelHref(raw = '') {
-  const digits = String(raw).replace(/[^\d+]/g, '');
+  const digits = String(raw).replace(/[^\d+]/g, ''); // keep only digits and plus
   return digits ? `tel:${digits}` : null;
 }
 
+// Set link href and text if the element exists
 function setLink(el, href, text) {
-  if (!el) return;
-  if (href) el.setAttribute('href', href);
-  if (text) el.textContent = text; // only replace if non-empty
+  if (!el) return; // guard if the element is missing
+  if (href) el.setAttribute('href', href); // update href when provided
+  if (text) el.textContent = text; // replace text when non-empty
 }
 
+// Reveal the navbar and hide any loading indicator
 function showTopbarAndHideLoader() {
   const topbar = document.getElementById('templatemo_nav_top');
   if (topbar) topbar.style.visibility = 'visible';
@@ -46,55 +19,39 @@ function showTopbarAndHideLoader() {
   if (loader) loader.style.display = 'none';
 }
 
-// Try multiple attribute names to be resilient to schema differences
-function firstNonEmpty(obj, candidates) {
-  for (const key of candidates) {
-    const val = obj?.[key];
-    if (val !== undefined && val !== null && String(val).trim() !== '') return val;
+// Fetch site settings from Strapi and populate the top bar
+async function renderTopbar() {
+  try {
+    const resp = await fetch('http://localhost:1337/api/site-setting?populate=*'); // request settings
+    const data = await resp.json(); // parse JSON body
+    const attrs = data?.data?.attributes || {}; // safely access attributes
+
+    // Pull out needed fields
+    const {
+      topEmail,
+      topPhone,
+      socialFacebook,
+      socialInstagram,
+      socialTwitter,
+      socialLinkedIn,
+    } = attrs;
+
+    // Apply values to the DOM
+    if (topEmail)
+      setLink(document.getElementById('top-email'), `mailto:${topEmail}`, topEmail);
+    if (topPhone)
+      setLink(document.getElementById('top-phone'), toTelHref(topPhone), topPhone);
+    if (socialFacebook) setLink(document.getElementById('top-fb'), socialFacebook);
+    if (socialInstagram) setLink(document.getElementById('top-ig'), socialInstagram);
+    if (socialTwitter) setLink(document.getElementById('top-tw'), socialTwitter);
+    if (socialLinkedIn) setLink(document.getElementById('top-li'), socialLinkedIn);
+  } catch (err) {
+    console.warn('[TopBar] failed to fetch site-setting:', err); // log any errors
+  } finally {
+    showTopbarAndHideLoader(); // always reveal the nav and hide loader
   }
-  return null;
 }
 
-// ===== Main =====
+// Run once the DOM has loaded
+window.addEventListener('DOMContentLoaded', renderTopbar);
 
-
-async function renderTopBarIDs() {
-    try {
-      console.time('site-setting');
-      const resp = await withTimeout(getJSON('site-setting', { populate: '*' }), 12000);
-      console.timeEnd('site-setting');
-      console.debug('[TopBar] raw response:', resp);
-  
-      // Soporta REST de Strapi que devuelve atributos en data.attributes o en data plano
-      const s =
-        (resp && resp.data && (resp.data.attributes || resp.data)) ||
-        resp?.attributes ||
-        resp ||
-        {};
-  
-      console.debug('[TopBar] resolved fields:', s);
-  
-      // Pick fields con fallbacks
-      const email = firstNonEmpty(s, ['topEmail', 'email', 'contactEmail']);
-      const phone = firstNonEmpty(s, ['topPhone', 'phone', 'contactPhone', 'telephone']);
-      const fb    = firstNonEmpty(s, ['socialFacebook', 'facebook', 'fb', 'facebookUrl']);
-      const ig    = firstNonEmpty(s, ['socialInstagram', 'instagram', 'ig', 'instagramUrl']);
-      const tw    = firstNonEmpty(s, ['socialTwitter', 'twitter', 'tw', 'twitterUrl', 'xUrl']);
-      const li    = firstNonEmpty(s, ['socialLinkedIn', 'linkedin', 'li', 'linkedinUrl']);
-  
-      if (email) setLink(document.getElementById('top-email'), `mailto:${email}`, email);
-      if (phone) setLink(document.getElementById('top-phone'), toTelHref(phone), phone);
-      if (fb)    setLink(document.getElementById('top-fb'), fb);
-      if (ig)    setLink(document.getElementById('top-ig'), ig);
-      if (tw)    setLink(document.getElementById('top-tw'), tw);
-      if (li)    setLink(document.getElementById('top-li'), li);
-    } catch (err) {
-      console.warn('[TopBar] failed to load SiteSetting:', err);
-    } finally {
-      showTopbarAndHideLoader();
-    }
-  }
-
-  
-// Ensure DOM exists; script is defer'ed
-window.addEventListener('DOMContentLoaded', renderTopBarIDs);
