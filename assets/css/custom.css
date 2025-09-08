@@ -5,6 +5,9 @@ Custom Css
 /* Ocultar topbar hasta que cargue Strapi */
 #templatemo_nav_top { visibility: hidden; }
 
+/* Cuando JS diga que está listo */
+html.topbar-ready #templatemo_nav_top { visibility: visible; }
+
 
 /* Marco genérico reutilizable */
 .hoja-img-frame {

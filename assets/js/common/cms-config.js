@@ -1,7 +1,9 @@
 // assets/js/common/cms-config.js
 
 // 1. URL de Strapi (local vs producción)
-window.STRAPI_URL = 'https://diplomatic-bloom-70eecbcafd.strapiapp.com';
+window.STRAPI_URL = (location.hostname === 'localhost')
+  ? 'http://localhost:1337'
+  : 'https://diplomatic-bloom-70eecbcafd.strapiapp.com';
 
 // 2. Token opcional (NO recomendado exponer en front si es sensible)
 // Si usas opción A (público sin token), puedes dejarlo vacío.

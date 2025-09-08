@@ -1,57 +1,66 @@
-// Convert a raw phone number to a `tel:` link
-function toTelHref(raw = '') {
-  const digits = String(raw).replace(/[^\d+]/g, ''); // keep only digits and plus
-  return digits ? `tel:${digits}` : null;
-}
+// assets/js/sections/topbar.js
+const domReady = () =>
+  document.readyState === 'loading'
+    ? new Promise(r => document.addEventListener('DOMContentLoaded', r, { once: true }))
+    : Promise.resolve();
 
-// Set link href and text if the element exists
-function setLink(el, href, text) {
-  if (!el) return; // guard if the element is missing
-  if (href) el.setAttribute('href', href); // update href when provided
-  if (text) el.textContent = text; // replace text when non-empty
-}
+(async () => {
+  await domReady();
 
-// Reveal the navbar and hide any loading indicator
-function showTopbarAndHideLoader() {
-  const topbar = document.getElementById('templatemo_nav_top');
-  if (topbar) topbar.style.visibility = 'visible';
-  const loader = document.getElementById('page-loader');
-  if (loader) loader.style.display = 'none';
-}
-
-// Fetch site settings from Strapi and populate the top bar
-async function renderTopbar() {
-  try {
-    const resp = await fetch('http://localhost:1337/api/site-setting?populate=*'); // request settings
-    const data = await resp.json(); // parse JSON body
-    const attrs = data?.data?.attributes || {}; // safely access attributes
-
-    // Pull out needed fields
-    const {
-      topEmail,
-      topPhone,
-      socialFacebook,
-      socialInstagram,
-      socialTwitter,
-      socialLinkedIn,
-    } = attrs;
-
-    // Apply values to the DOM
-    if (topEmail)
-      setLink(document.getElementById('top-email'), `mailto:${topEmail}`, topEmail);
-    if (topPhone)
-      setLink(document.getElementById('top-phone'), toTelHref(topPhone), topPhone);
-    if (socialFacebook) setLink(document.getElementById('top-fb'), socialFacebook);
-    if (socialInstagram) setLink(document.getElementById('top-ig'), socialInstagram);
-    if (socialTwitter) setLink(document.getElementById('top-tw'), socialTwitter);
-    if (socialLinkedIn) setLink(document.getElementById('top-li'), socialLinkedIn);
-  } catch (err) {
-    console.warn('[TopBar] failed to fetch site-setting:', err); // log any errors
-  } finally {
-    showTopbarAndHideLoader(); // always reveal the nav and hide loader
+  if (!window.strapiFetch) {
+    console.error('[topbar] Falta cms-config.js (strapiFetch no existe).');
+    return;
   }
-}
 
-// Run once the DOM has loaded
-window.addEventListener('DOMContentLoaded', renderTopbar);
+  // Usa el UID real de tu Single Type; por tu log parece "site-setting"
+  const endpoint = 'site-setting';
 
+  let res;
+  try {
+    res = await window.strapiFetch(endpoint);
+  } catch (e) {
+    console.error('[topbar] Error pidiendo site-setting:', e);
+    return;
+  }
+
+  if (!res || !res.data) {
+    console.error('[topbar] Respuesta sin data en site-setting:', res);
+    return;
+  }
+
+  // ✅ Strapi v5: single -> res.data { id, documentId, ...campos }
+  //    v4 (legacy): single -> res.data.attributes
+  const record = Array.isArray(res.data) ? res.data[0] : res.data;
+  const attrs = record?.attributes || record; // funciona para v4 y v5
+
+  if (!attrs) {
+    console.warn('[topbar] Sin attrs tras normalizar:', res.data);
+    return;
+  }
+
+  const $ = id => document.getElementById(id);
+  const setTextHref = (id, text, href) => {
+    const el = $(id);
+    if (!el) { console.warn(`[topbar] Falta #${id} en el DOM`); return; }
+    if (text) el.textContent = text;
+    if (href) el.href = href;
+  };
+
+  // 🔁 Ajusta los nombres a tus campos reales (según tu log):
+  // topEmail, topPhone, socialFacebook, socialInstagram, socialLinkedIn, socialTwitter
+  setTextHref('top-email', attrs.topEmail,   attrs.topEmail   ? `mailto:${attrs.topEmail}` : null);
+  setTextHref('top-phone', attrs.topPhone,   attrs.topPhone   ? `tel:${attrs.topPhone}`   : null);
+  setTextHref('top-fb',    null,             attrs.socialFacebook  || '#');
+  setTextHref('top-ig',    null,             attrs.socialInstagram || '#');
+  setTextHref('top-tw',    null,             attrs.socialTwitter   || '#');
+  setTextHref('top-li',    null,             attrs.socialLinkedIn  || '#');
+
+
+  // === Siempre se ejecuta, haya éxito o error ===
+  const topbar = document.getElementById('templatemo_nav_top');
+  if (topbar) {
+    topbar.style.visibility = 'visible';
+  }
+
+
+})();

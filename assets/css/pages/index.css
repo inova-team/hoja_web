@@ -1,0 +1,7 @@
+
+/* Ocultar topbar hasta que cargue Strapi */
+#templatemo_nav_top { visibility: hidden; }
+
+/* Cuando JS diga que está listo */
+html.topbar-ready #templatemo_nav_top { visibility: visible; }
+
