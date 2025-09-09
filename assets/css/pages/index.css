@@ -5,3 +5,10 @@
 /* Cuando JS diga que está listo */
 html.topbar-ready #templatemo_nav_top { visibility: visible; }
 
+/* Ocultar navbar principal hasta que cargue Strapi */
+nav.navbar[style*="visibility:hidden"] { visibility: hidden; }
+
+/* Cuando JS diga que está listo */
+html.navbar-ready nav.navbar[style*="visibility:hidden"] { visibility: visible; }
+
+

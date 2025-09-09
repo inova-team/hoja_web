@@ -3,7 +3,7 @@ import { CMS_BASE_URL } from '../common/config.js';
 
 export async function mountNavbar(options = {}) {
   const {
-    endpoint = '/api/site-navbar?populate[logo]=*&populate[menuItems]=*',
+    endpoint = '/api/site-navbar?populate[logo]=true&populate[menuItems]=true',
     selectors = {},
     onFinally,
   } = options;
@@ -59,5 +59,12 @@ export async function mountNavbar(options = {}) {
     console.error('[navbar] Error', e);
   } finally {
     onFinally?.();
+      // === Siempre se ejecuta, haya éxito o error ===
+  // El navbar tiene id="navbar", pero si te da null, puedes intentar con querySelector y la clase .navbar
+  const navbar = document.getElementById('templatemo_navbar');
+  console.log(navbar)
+  if (navbar) {
+    navbar.style.visibility = 'visible';
+  }
   }
 }
